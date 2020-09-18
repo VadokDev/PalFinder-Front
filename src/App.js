@@ -1,26 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+
+import {
+  Navbar,
+  Container,
+  Row,
+  Col,
+} from "react-bootstrap";
+
+import Product from "./components/Product.js";
+import SearchForm from "./components/SearchForm.js";
+import { useSelector } from 'react-redux';
+
 
 function App() {
+  const productList = useSelector(store => store.searchReducer.productList);
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <React.Fragment>
+      <Navbar fixed="top" bg="dark" variant="dark" expand="lg">
+        <Navbar.Brand className="ml-2 mr-5">Walmart PalFinder</Navbar.Brand>
+        <SearchForm />
+      </Navbar>
+      <Container fluid>
+        <Row id="resultsRow">
+          {productList.map((v, i) => {
+            return <Col md={3} key={"col" + v.id} className={(i > 3) ? "mt-4" : ""}>
+              <Product
+                key={v.id}
+                brand={v.brand}
+                description={v.description}
+                image={v.image}
+                price={v.price}
+                priceF={v.priceF}
+              />
+            </Col>
+          })}
+        </Row>
+      </Container>
+    </React.Fragment>
   );
 }
-
 export default App;
